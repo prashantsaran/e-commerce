@@ -1,0 +1,10 @@
+.fixed-div {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    /* Additional styles for the fixed div */
+  }
+  .bg-light-orange {
+    background-color: #312e2a; /* Replace with your desired light orange color code */
+  }

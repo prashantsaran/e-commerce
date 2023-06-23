@@ -1,0 +1,55 @@
+
+<section class="header-main border-bottom bg-light-orange ">
+    <div class="container-fluid fixed-div bg-light-orange">
+      <div class="row  pt-3 pb-2 d-flex align-items-center">
+        <div class="col-md-2">
+          <img class="d-none d-md-flex" src="assets/applicationlogo.png" style="width: 45px; height: 35px;" >
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex form-inputs">
+            <input class="form-control" type="text" #search placeholder="Search any product..." (keyup.enter)="searchOnEnter(search.value)">
+            <i class="bx bx-search"></i>
+          </div>
+        </div>
+  
+        <div class="col-md-2">
+          <div class="d-flex d-none d-md-flex flex-row align-items-center">
+            <span class="shop-bag"><i class='bx bxs-shopping-bag'></i></span>
+            
+              <button type="button " class="btn btn-primary shadow-none" (click)="viewCart()"><img  style="width: 30px; height: 25px;" src="/assets/whitecart.png"></button>
+         
+          </div>
+
+      </div>
+      <div class="class col-md-2">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a class="text-white" href="#" data-toggle="modal" data-target="#logoutModal ">logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    </div>
+  </section>
+
+
+  <div class="modal" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4>Log Out <i class="fa fa-lock"></i></h4>
+        </div>
+        <div class="modal-body">
+          <p><i class="fa fa-question-circle"></i> Are you sure you want to log-off? <br /></p>
+          <div class="actionsBtns">
+              <form action="/logout" method="post">
+                 
+                  <input type="submit" class="btn btn-default btn-primary" data-dismiss="modal" value="Logout" />
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

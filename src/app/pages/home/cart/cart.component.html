@@ -1,0 +1,80 @@
+<app-navbar></app-navbar>
+
+<div *ngIf="isCardEmpty(); else cartDisplay">
+  <section >
+    <div class="container mt-5 pt-3">
+      <div class="row">
+        <div class="col-12 text-center">
+     
+          <img src="assets/emptycart.svg" class="mb-3" alt="" style=" max-height: 200px; max-width: auto; ">
+     
+          <h2>Your cart is currently empty</h2>
+    
+          <p class="mb-0">I think the below button is important. Hit this button and you will find a lot of interesting products on our "Shop" page</p>
+      
+         <a routerLink="/home"  class="btn btn-primary mt-4 mb-0">Back to Shop</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+<ng-template #cartDisplay>
+  <section  style="background-color: #fdccbc h-100; width: 100%;">
+    <div class="container ">
+      <div class="row d-flex justify-content-center align-items-center ">
+        <div class="col">
+          <div class="mt-5 pt-3">
+          <p><span class="h2">Shopping Cart :</span><span class="h4"></span></p>
+        </div>
+        <div class="col-8" *ngFor="let item of cartList ">
+  
+          <div class="  card rounded-3 p-4 mb-4  hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="dark ">
+            <div class="row d-flex justify-content-between align-items-center"> <!--display flex-->
+              <div class="col-2 "> 
+                <img [src]="item.imageUrl" class="img-fluid rounded-3"
+                 >
+              </div>
+              <div class="col-2">
+                <p class="lead fw-normal mb-2">{{item.name}}</p>
+                <p><span class="text-muted">Color: </span>{{ item.color }}</p>
+              </div>
+             
+               <div class="col-3  d-flex">
+              <button class="btn btn-danger rounded-circle" (click)="decreaseTotalItems(item)">
+                -
+              </button>
+              
+              <input #totalItems id="form1" min="0" name="quantity" value="{{item.totalItems}}" type="number" class="form-control form-control-sm" style="width: 40px; ;"/>
+              
+              <button class="btn btn-success rounded-circle" (click)="increaseTotalItems(item)">
+                +
+              </button>
+               </div>
+              <div class="col-2">
+                <h5 class="mb-0"><span class="text-muted">Price: </span>${{item.price}}</h5>
+              </div>
+              <div class="col-3 text-end">
+                <button type="button" class="btn btn-danger" (click)="deleteCartItem(item)">Delete</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  
+  </section>
+  <section class="header-main border-bottom bg-black fixed-bottom">
+    <div class="container-fluid bg-black">
+
+       
+    <div class="col-7 d-flex  p-2 mb-2 " >
+      <h5 class="fw-bold mb-0 text-white">Total: $</h5>
+      <h5 class="fw-bold mb-0 text-white"  >{{ calculateTotalPrice() }}</h5>
+    </div>
+    </div>
+  </section>
+  </ng-template>
+

@@ -1,0 +1,16 @@
+.fixed-div {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+ 
+    /* Additional styles for the fixed div */
+  }
+  .container-fluid {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  

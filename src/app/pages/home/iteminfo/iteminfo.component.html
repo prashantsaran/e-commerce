@@ -1,0 +1,52 @@
+<div *ngIf="singleItem === undefined; else itemContent" class="alert alert-danger mt-5">
+  <div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="text-center row">
+      <div class=" col-md-6">
+        <img src="assets/notfoundjpg.jpg" alt="" class="img-fluid">
+      </div>
+      <div class=" col-md-6 mt-5">
+        <p class="fs-3"> <span class="text-danger">Opps!</span> Item not found.</p>
+        <p class="lead">
+          The item you’re looking for doesn’t exist.
+        </p>
+        <a routerLink="/home" class="btn btn-primary">Go Home</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<ng-template #itemContent>
+  <div class="container d-flex justify-content-center">
+    <div class="card-body p-4 card rounded-3 mb-4 mt-5 p-4" style="width: 50%;">
+
+        <!-- Rest of your card content -->
+    <div class="row d-flex justify-content-between align-items-center">
+      <div class="col-md-3 ">
+        <img class="col-md-2 col-lg-2 col-xl-2" [src]="singleItem?.imageUrl" class="img-fluid rounded-3"
+          alt="Cotton T-shirt">
+      </div>
+      <div class="col-md-3 ">
+        <p class="lead fw-normal mb-2">{{ singleItem?.name }}</p>
+        <p><span class="text-muted">Color: </span>{{ singleItem?.color }}</p>
+      </div>
+      <div class="col-md-2">
+        <h5 class="mb-0"><span class="text-muted">Price: </span>${{ singleItem?.price }}</h5>
+      </div>
+      <div class="col-md-4 text-end">
+        <div (click)="addToCart(singleItem!)">
+          <span class="btn btn-primary" *ngIf="!singleItem?.clicked">Add to Cart</span>
+          <span class="btn btn-success" *ngIf="singleItem?.clicked">Item Added</span>
+        </div>
+      </div>
+    </div>
+      <div class="row  ">
+        {{singleItem?.info}}
+      </div>
+    
+   
+  </div>
+  </div>
+ 
+</ng-template>
