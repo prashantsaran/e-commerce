@@ -1,137 +1,78 @@
-
 import { Injectable } from '@angular/core';
 import { Items } from '../interface/items';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Credentials } from '../interface/credentials';
 
 @Injectable({
-providedIn: 'root'
+  providedIn: 'root'
 })
 export class ItemsService {
 
-singleitem: Items |undefined;
-items: Items[] = [
-{
-name: 'Samsung',
-color: 'Red',
-price: 427,
-quantity:0,
-imageUrl: 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img2.webp',
-clicked: false,
-totalItems:1,
-info:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum Lorem ipsum dolor sit amet.. comes from a line in section 1.10.32."
+  credentials: Credentials[] = [];
 
-},
-{
-name: 'Camera',
-color: 'Black',
-price: 700,
-quantity:0,
-imageUrl: 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img3.webp',
-clicked: false,
-totalItems:1,
-info:"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum Lorem ipsum dolor sit amet.. comes from a line in section 1.10.32."
-},
-{
-name: 'Iphone',
-color: 'Black',
-price: 35,
-quantity:0,
-imageUrl: 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp',
-clicked: false,
-totalItems:1,
-info:"Display: 6.2-inch Dynamic AMOLED display with 2400 x 1080 pixels resolution\n" +
-"Processor: Qualcomm Snapdragon 888 or Exynos 2100 chipset (depending on the region)\n" +
-"RAM: 8GB\n" +
-"Storage: Available in 128GB and 256GB configurations (non-expandable)\n" +
-"Camera:\n" +
-"Rear: 12MP wide-angle lens, 12MP ultra-wide-angle lens, and 64MP telephoto lens\n" +
-"Front: 10MP sensor\n" +
-"Battery: 4,000mAh capacity with support for fast wired and wireless charging, as well as reverse wireless charging\n" +
-"Operating System: Samsung One UI based on Android 11\n" +
-"Connectivity: 5G capable\n" +
-"Design: Slim profile, metal and glass construction, minimal bezels\n" +
-"Other Features: Dynamic AMOLED display with 120Hz refresh rate, water and dust resistance (IP68 rating)"
-},
-{
-  name: 'Tshirt',
-  color: 'White',
-  price: 10,
-  quantity:0,
-  imageUrl: 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img5.webp',
-  clicked: false,
-  totalItems:1,
-  info:""
-  },
-  {
-    name: 'Tshirt',
-    color: 'Black',
-    price: 10,
-    quantity:0,
-    imageUrl: 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img6.webp',
-    clicked: false,
-    totalItems:1,
-    info:""
-    },
-{
-name: 'Laptop',
-color: 'Grey',
-price: 620,
-quantity:0,
-imageUrl: 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img4.webp',
-clicked: false,
-totalItems:1,
-info: "Display: 6.2-inch Dynamic AMOLED display with 2400 x 1080 pixels resolution\n" +
-"Processor: Qualcomm Snapdragon 888 or Exynos 2100 chipset (depending on the region)\n" +
-"RAM: 8GB\n" +
-"Storage: Available in 128GB and 256GB configurations (non-expandable)\n" +
-"Camera:\n" +
-"Rear: 12MP wide-angle lens, 12MP ultra-wide-angle lens, and 64MP telephoto lens\n" +
-"Front: 10MP sensor\n" +
-"Battery: 4,000mAh capacity with support for fast wired and wireless charging, as well as reverse wireless charging\n" +
-"Operating System: Samsung One UI based on Android 11\n" +
-"Connectivity: 5G capable\n" +
-"Design: Slim profile, metal and glass construction, minimal bezels\n" +
-"Other Features: Dynamic AMOLED display with 120Hz refresh rate, water and dust resistance (IP68 rating)"
-}
-];
-cart: Items[] = [];
+  // Method to set the credentials
+  setCredential(credentials: Credentials[]) {
+    this.credentials = credentials;
+    console.log("setCredentials", credentials);
+  }
 
-constructor() {
-// Constructor logic, if any
-}
+  singleitem: Items = {} as Items;
+  cart: Items[] = [];
+  itemList: Items[] = [];
+  name: string = "";
+  validLogin: boolean;
 
-addItem(item: Items): void {
-this.cart.push(item);
-}
+  constructor(private http: HttpClient) {
+    this.validLogin = false;
 
-getAllItems(): Items[] {
-return this.items;
-}
+    // Fetch data from the server
+    this.getData().subscribe((data) => {
+      console.warn("data", data);
+      this.itemList = data;
+    })
+  }
 
-getAllCarts(): Items[] {
-return this.cart;
-}
+  // Method to add an item to the cart
+  addItem(item: Items): void {
+    this.cart.push(item);
+  }
 
-searchItemByName(name: string): Items | undefined {
-  const lowercaseName = name.toLowerCase(); // Convert the search name to lowercase
+  // Method to fetch data from the server
+  getData(): Observable<Items[]> {
+    return this.http.get<Items[]>('http://localhost:8080/items');
+  }
 
-  return this.items.find(item => item.name.toLowerCase() === lowercaseName);
-}
+  // Method to fetch credentials from the server
+  getCredentials(): Observable<Credentials[]> {
+    return this.http.get<Credentials[]>('http://localhost:8080/Credentials');
+  }
 
+  // Method to get all items in the cart
+  getAllCarts(): Items[] {
+    return this.cart;
+  }
 
-// getDataObservable(): Observable<Items | undefined> {
-// return this.singleitem.asObservable();
-// }
+  // Method to post data to the server
+  postData(url: string, data: Credentials) {
+    console.log(data);
+    return this.http.post(url, data);
+  }
 
+  // Method to make a GET request to fetch credentials from the server
+  getRequest(): Observable<Credentials[]> {
+    return this.http.get<Credentials[]>('http://localhost:8080/Credentials');
+  }
 
-// setData(data: Items |undefined): void {
+  // Method to search an item by name
+  searchItemByName(name: string): Items | undefined {
+    const lowercaseName = name.toLowerCase(); // Convert the search name to lowercase
 
-//   this.singleitem=data;
-//   // console.log(this.singleitem);
-// }
-getSingleItem():Items|undefined{
-// console.log(this.singleitem?.name);
-return this.singleitem;
+    return this.itemList.find((item: { name: string; }) => item.name.toLowerCase() === lowercaseName);
+  }
 
-}
+  // Method to get the single item
+  getSingleItem(): Items {
+    return this.singleitem;
+  }
 }

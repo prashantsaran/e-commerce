@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ItemsService } from 'src/app/service/items.service';
 
@@ -9,17 +9,15 @@ import { ItemsService } from 'src/app/service/items.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-
-  constructor(private itemsService: ItemsService,private router:Router){
+  itemsService: ItemsService = inject(ItemsService);
+  constructor(private router: Router) {
 
   }
   searchOnEnter(itemName: string): void {
-    // const selectedItem = this.itemsService.searchItemByName(itemName);
-    // this.itemsService.setData(selectedItem);
-    this.router.navigate(['/search-page'], { queryParams: { itemName: itemName } });
-
+    this.router.navigate(['/search-page'], { queryParams: { itemName: itemName } })
   }
-    viewCart(){
-      this.router.navigate(['/cart'])
-    }
+  viewCart() {
+
+    this.router.navigate(['/cart'])
+  }
 }

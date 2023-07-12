@@ -1,7 +1,7 @@
-import { Component, OnInit ,OnChanges } from '@angular/core';
-import { Items } from 'src/app/interface/items';
+import { Component, OnInit, OnChanges, inject } from '@angular/core';
 import { ItemsService } from 'src/app/service/items.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Items } from 'src/app/interface/items';
 
 
 @Component({
@@ -9,49 +9,44 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './iteminfo.component.html',
   styleUrls: ['./iteminfo.component.css']
 })
-export class IteminfoComponent implements OnInit{
-  singleItem:Items | undefined;
-  
-  constructor(private itemsService: ItemsService,private route: ActivatedRoute) {
+export class IteminfoComponent implements OnInit {
+  singleItem: Items;
 
 
-    // const selectedItem = this.itemsService.searchItemByName(itemName);
-    // this.itemsService.setData(selectedItem);
-    
-      // this.singleItem=this.itemsService.getSingleItem();
-      // console.log(this.singleItem);
-  
-    
-   
+  itemsService: ItemsService = inject(ItemsService);
+  constructor(private route: ActivatedRoute, private router: Router) {
+    this.singleItem = {} as Items;
+
+
+
+
 
   }
-  
 
-ngOnInit(): void {
-  this.route.queryParams.subscribe(params => {
-    const itemName = params['itemName'];
 
-    console.log(itemName);
-    this.singleItem = this.itemsService.searchItemByName(itemName);
-    console.log(this.singleItem);
-    console.log(this.singleItem?.info);
-  });
-}
-  // ngOnInit(){
-  //   this.singleItem=this.itemsService.getSingleItem();
-  //   console.log(this.singleItem);
-  // }
-  // ngOnChanges() {
-  //   this.singleItem=this.itemsService.getSingleItem();
-  //   console.log(this.singleItem);
+  ngOnInit(): void {
 
-  // }
-   addToCart(item:Items){
-      this.itemsService.addItem(item);
-      item.clicked = true;  // Set 'clicked' property to true when the button is clicked
-      console.log(item.clicked);
+    this.route.queryParams.subscribe(params => {
+      const itemName = params['itemName'];
+      const foundItem = this.itemsService.searchItemByName(itemName);
+      if (foundItem !== undefined) {
+        this.singleItem = foundItem;
+        console.log(this.singleItem);
+        console.log(this.singleItem.info);
+      } else {
 
-    }
+        this.router.navigate(['/not-found'])
+        console.log('Item not found.');
+      }
+    });
+  }
+
+  addToCart(item: Items) {
+    this.itemsService.addItem(item);
+    item.clicked = true;
+    console.log(item.clicked);
+
+  }
 
 
 }

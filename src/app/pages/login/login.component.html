@@ -1,62 +1,4 @@
-<!-- <section class="vh-100" style="background-color: #665f61;">
-    <div class="container-fluid py-5 ">
 
-      
-            <div class="card" style="border-radius: 2rem;">
-                
-
-
-                    <div class="card-body p-4 p-lg-5 text-black">
-
-                       
-                            <h1>Please Login</h1>
-                            <form [formGroup]="loginForm" (ngSubmit)="loginUser(user.value,pass.value)">
-
-
-
-
-                                <div class="form-group row mt-3 ">
-                                    <label class="col-sm-2 col-form-label-sm">Username</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control form-control-sm" #user name="username"
-                                            placeholder="Enter Username" formControlName="username">
-                                    </div>
-                                    <span class="col-sm-7 text-danger font-italic small"
-                                        *ngIf="userName && userName.invalid && userName.touched">Invalid Username</span>
-                                </div>
-                                <div class="form-group row mt-3 ">
-                                    <label class="col-sm-2 col-form-label-sm">Password</label>
-                                    <div class="col-sm-3">
-                                        <input type="password" class="form-control form-control-sm" name="password"
-                                            #pass placeholder="Enter password" formControlName="password">
-                                    </div>
-                                    <span class="col-sm-7 text-danger font-italic small "
-                                        *ngIf="password &&  password.invalid && password.touched">please input valid
-                                        password</span>
-                                </div>
-
-
-                                <button type="submit" class="btn btn-primary pl-5 ml-4"
-                                    [disabled]="loginForm.invalid">Submit</button>
-
-
-
-                                <br>
-                                <br>
-                                <br>
-
-
-                            </form>
-
-                        </div>
-
-
-                    </div>
-                </div>
-           
-       
-    
-              -->
 
 <div class="wrapper fadeInDown">
   <div id="formContent">
@@ -64,51 +6,60 @@
 
 
     <div class=" d-flex justify-content-center pl-5 pr-5 pt-4 ">
-    <img class="d-none d-md-flex" src="assets/applicationlogo.png" style="width: 45px; height: 45px;" >
+      <img class="d-none d-md-flex" src="assets/applicationlogo.png" style="width: 45px; height: 45px;">
     </div>
     <div class="fadeIn first pl-5 pr-5 pt-2 pb-3">
-     <h1>Please Login</h1>
+      <h1>Please Login</h1>
     </div>
 
-   
-    <form [formGroup]="loginForm"  >
-        <div class="d-flex justify-content-center">
-            <div class="form-outline px-5 mt-3">
-              <input class="form-control form-control-lg narrower-input" #user placeholder="Enter Username" formControlName="username">
-            </div>
-          </div>
-          
-          <span class="text-danger font-italic small" *ngIf="userName && userName.invalid && userName.touched">Invalid Username</span>
-         
-          <br>
-          <div class="d-flex justify-content-center">
-            <div class="form-outline px-5 mt-3">
-            <input type="password" class="form-control form-control-lg narrower-input" name="password" #pass placeholder="Enter password" formControlName="password">
-          </div>
-          </div>
-          <span class="col-sm-7 text-danger font-italic small" *ngIf="password &&  password.invalid && password.touched">please input valid
-      password</span>
+
+    <form [formGroup]="loginForm" (ngSubmit)="loginUser()">
+      <div class="d-flex justify-content-center">
+        <div class="form-outline px-5 mt-3">
+          <input class="form-control form-control-lg narrower-input" #user placeholder="Enter Username"
+            formControlName="username">
+        </div>
+      </div>
+
+      <span class="text-danger font-italic small" *ngIf="userName && userName.invalid && userName.touched">Invalid
+        Username</span>
+
+      <br>
+      <div class="d-flex justify-content-center">
+        <div class="form-outline px-5 mt-3">
+          <input type="password" class="form-control form-control-lg narrower-input" name="password" #pass
+            placeholder="Enter password" formControlName="password">
+        </div>
+      </div>
+      <span class="col-sm-7 text-danger font-italic small"
+        *ngIf="password &&  password.invalid && password.touched">please input valid
+        password</span>
       <br>
       <br>
-      <input type="submit" class="fadeIn fourth " value="Login" (click)="loginUser(user.value,pass.value)" >
+
+      <input type="submit" class="fadeIn fourth " value="Login">
+
+      <div class="text-center">
+        <p>Not a member? <a routerLink="/registration">Register</a></p>
+      </div>
     </form>
- 
-    <div *ngIf="visibility && !authentication ; else loggedOut">
+
+
+
+
+    <div *ngIf="authentication ; else loggedOut">
       <div class="alert alert-danger">
         <strong>Invalid Credentials</strong>
       </div>
- 
+
     </div>
-    
-    <ng-template #loggedOut  >
-      <div class="alert alert-success"  *ngIf="visibility">
-        <strong>Success!</strong> 
+
+    <ng-template #loggedOut>
+      <div class="alert alert-success">
+        <strong>Success!</strong>
       </div>
-      
+
     </ng-template>
 
   </div>
 </div>
-
-
-

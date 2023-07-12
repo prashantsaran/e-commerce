@@ -1,55 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Items } from 'src/app/interface/items';
 import { ItemsService } from 'src/app/service/items.service';
-
+import { Inject } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent {
-  selectedItem : Items [] | undefined;
-  itemList: Items[] = [];
+export class MainComponent implements OnInit {
+  name: string;
+  selectedItem: Items;
+  isFetching: boolean = false;
 
-  constructor(private itemsService: ItemsService,private router:Router) {
-    this.itemList = this.itemsService.getAllItems();
+  itemList: Items[];
+  itemsService: ItemsService = inject(ItemsService);
 
+  constructor(private router: Router, private http: HttpClientModule) {
+    this.name = ""
+    this.selectedItem = {} as Items;
 
-    
+    this.itemList = [];
+
   }
 
-  
 
-  // searchOnEnter(itemName:string):void {
-  //   console.log(this.itemsService.searchItemByName(itemName));
-    
-  //   this.itemsService.setData(this.itemsService.searchItemByName(itemName));
-    
-  //   this.router.navigate(['/iteminfo'])
-    
-
-
-  // }
-  
-
-
-  //   viewCart(){
-  //     this.router.navigate(['/cart'])
-  //   }
-
-    addToCart(item:Items){
+  addToCart(item: Items) {
+    if (item.clicked == false) {
       this.itemsService.addItem(item);
-      item.clicked = true;  // Set 'clicked' property to true when the button is clicked
+      item.clicked = true;
       console.log(item.clicked);
-
-    }
-    itemCardClicked(item:Items):void{
-      this.router.navigate(['/search-page'], { queryParams: { itemName: item.name } });
-
     }
 
-  
+  }
+  itemCardClicked(item: Items): void {
+    this.router.navigate(['/search-page'], { queryParams: { itemName: item.name } });
+
+  }
+
+  ngOnInit() {
+
+    this.name = this.itemsService.name;
+
+
+
+    this.itemList = this.itemsService.itemList;
+
+
+
+  }
 
 }
-

@@ -1,58 +1,67 @@
-import { Component , OnChanges, SimpleChanges } from '@angular/core';
-
+import { Component, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { Items } from 'src/app/interface/items';
+
+// import { Items } from 'src/app/interface/items';
 import { ItemsService } from 'src/app/service/items.service';
-
-
-
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent{
-  cartList:Items[]=[];
- 
-  itemList: Items[] = [];
+export class CartComponent {
+  cartList: Items[] = [];
 
-  constructor(private itemsService: ItemsService) {
+  totalItemsInCart: number;
+
+  itemList: Items[] = [];
+  itemsService: ItemsService = inject(ItemsService);
+  constructor() {
     this.cartList = this.itemsService.getAllCarts();
+    this.totalItemsInCart = this.cartList.length;
     this.calculateTotalPrice();
   }
 
 
-  isCardEmpty():boolean{
-    return this.cartList.length==0;
-  }
+
   deleteCartItem(item: Items): void {
-    this.itemsService
+    item.clicked = false;
     const index = this.cartList.indexOf(item);
     if (index !== -1) {
-      this.cartList.splice(index,1);  // 1= number of elements to be removed
+      this.totalItemsInCart -= item.totalItems;
+      item.totalItems = 1;
+
+      this.cartList.splice(index, 1);
     }
-}
-calculateTotalPrice(): number {
-  let totalPrice = 0;
-
-  for (const item of this.cartList) {
-    totalPrice += item.price * item.totalItems;
   }
-  return totalPrice;
-}
+  calculateTotalPrice(): number {
+    let totalPrice = 0;
+
+    for (const item of this.cartList) {
+      totalPrice += item.price * item.totalItems;
+    }
+    return totalPrice;
+  }
+  changeTotalItems(item: Items, operation: string): void {
+
+    if (operation == "decrease") {
+      if (item.totalItems > 1) {
+
+        item.totalItems--;
+        this.totalItemsInCart--;
 
 
-decreaseTotalItems(item: Items): void {
-  if (item.totalItems > 1) {
-    item.totalItems--;
+
+      }
+    }
+    else {
+      this.totalItemsInCart++;
+      item.totalItems++;
+    }
+
     this.calculateTotalPrice();
   }
-}
 
-increaseTotalItems(item: Items): void {
-  item.totalItems++;
-  this.calculateTotalPrice();
-}
 
 
 }
